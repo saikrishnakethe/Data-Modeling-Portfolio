@@ -1,68 +1,84 @@
 Table drivers {
-  driver_id int [pk, increment]
-  driver_name varchar
-  license_number varchar [unique]
-  gender varchar
-  date_of_birth date
+  driver_id int [pk, increment]               // Surrogate Key for SCD Type 2
+  driver_external_id varchar                  // Original Driver ID
+  first_name varchar
+  last_name varchar
+  email varchar
+  phone varchar
   city varchar
   state varchar
   country varchar
-  valid_from timestamp
-  valid_to timestamp
-  current_flag boolean
-  created_at timestamp
+  vehicle_id int
+  license_number varchar
+  rating decimal(3,2)
+  total_trips int
+  start_date timestamp                        // SCD Type 2: record valid from
+  end_date timestamp                          // SCD Type 2: record valid to
+  active_flag boolean
 }
 
 Table riders {
-  rider_id int [pk, increment]
-  rider_name varchar
-  email varchar [unique]
-  gender varchar
-  date_of_birth date
+  rider_id int [pk, increment]                // Surrogate Key for SCD Type 2
+  rider_external_id varchar                    // Original Rider ID
+  first_name varchar
+  last_name varchar
+  email varchar
+  phone varchar
   city varchar
   state varchar
   country varchar
-  valid_from timestamp
-  valid_to timestamp
-  current_flag boolean
-  created_at timestamp
+  total_trips int
+  rating decimal(3,2)
+  start_date timestamp                        // SCD Type 2: record valid from
+  end_date timestamp                          // SCD Type 2: record valid to
+  active_flag boolean
+}
+
+Table vehicles {
+  vehicle_id int [pk, increment]
+  vehicle_external_id varchar
+  make varchar
+  model varchar
+  year int
+  license_plate varchar
+  color varchar
+  driver_id int
+  capacity int
+}
+
+Table trip_status {
+  trip_status_id int [pk]
+  status_name varchar                          // COMPLETED, CANCELLED, PENDING, etc.
+  description varchar
+}
+
+Table payment_methods {
+  payment_method_id int [pk]
+  method_name varchar                          // CASH, CARD, WALLET, etc.
+  provider varchar
 }
 
 Table trips_fact {
   trip_id bigint [pk, increment]
   driver_id int
   rider_id int
-  trip_start timestamp
-  trip_end timestamp
-  origin_city varchar
-  origin_state varchar
-  dest_city varchar
-  dest_state varchar
-  fare decimal(10,2)
-  distance_km decimal(6,2)
-  rating int
-  payment_method varchar
+  vehicle_id int
+  trip_status_id int
+  payment_method_id int
+  trip_start_ts timestamp
+  trip_end_ts timestamp
+  trip_distance_km decimal(6,2)
+  trip_duration_min int
+  base_fare decimal(10,2)
+  surge_multiplier decimal(3,2)
+  tip_amount decimal(10,2)
+  total_amount decimal(12,2)
   created_at timestamp
-}
-
-Table vehicles {
-  vehicle_id int [pk, increment]
-  driver_id int
-  vehicle_type varchar
-  vehicle_model varchar
-  license_plate varchar
-  created_at timestamp
-}
-
-Table promotions {
-  promotion_id int [pk, increment]
-  promotion_name varchar
-  start_date date
-  end_date date
-  discount_percent decimal(5,2)
-  description varchar
+  updated_at timestamp
 }
 
 Ref: drivers.driver_id < trips_fact.driver_id
 Ref: riders.rider_id < trips_fact.rider_id
-Ref: drivers.driver_id < vehicles.driver_id
+Ref: vehicles.vehicle_id < trips_fact.vehicle_id
+Ref: trip_status.trip_status_id < trips_fact.trip_status_id
+Ref: payment_methods.payment_method_id < trips_fact.payment_method_id
