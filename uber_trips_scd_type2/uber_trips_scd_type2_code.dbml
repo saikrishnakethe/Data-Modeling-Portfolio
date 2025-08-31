@@ -1,0 +1,68 @@
+Table drivers {
+  driver_id int [pk, increment]
+  driver_name varchar
+  license_number varchar [unique]
+  gender varchar
+  date_of_birth date
+  city varchar
+  state varchar
+  country varchar
+  valid_from timestamp
+  valid_to timestamp
+  current_flag boolean
+  created_at timestamp
+}
+
+Table riders {
+  rider_id int [pk, increment]
+  rider_name varchar
+  email varchar [unique]
+  gender varchar
+  date_of_birth date
+  city varchar
+  state varchar
+  country varchar
+  valid_from timestamp
+  valid_to timestamp
+  current_flag boolean
+  created_at timestamp
+}
+
+Table trips_fact {
+  trip_id bigint [pk, increment]
+  driver_id int
+  rider_id int
+  trip_start timestamp
+  trip_end timestamp
+  origin_city varchar
+  origin_state varchar
+  dest_city varchar
+  dest_state varchar
+  fare decimal(10,2)
+  distance_km decimal(6,2)
+  rating int
+  payment_method varchar
+  created_at timestamp
+}
+
+Table vehicles {
+  vehicle_id int [pk, increment]
+  driver_id int
+  vehicle_type varchar
+  vehicle_model varchar
+  license_plate varchar
+  created_at timestamp
+}
+
+Table promotions {
+  promotion_id int [pk, increment]
+  promotion_name varchar
+  start_date date
+  end_date date
+  discount_percent decimal(5,2)
+  description varchar
+}
+
+Ref: drivers.driver_id < trips_fact.driver_id
+Ref: riders.rider_id < trips_fact.rider_id
+Ref: drivers.driver_id < vehicles.driver_id
