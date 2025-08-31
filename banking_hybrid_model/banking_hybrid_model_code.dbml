@@ -1,0 +1,68 @@
+Table customers {
+  customer_id bigint [pk] // Surrogate Key
+  first_name varchar
+  last_name varchar
+  dob date
+  gender varchar
+  email varchar
+  phone varchar
+  address varchar
+  city varchar
+  state varchar
+  country varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table branches {
+  branch_id bigint [pk]
+  branch_name varchar
+  branch_address varchar
+  city varchar
+  state varchar
+  region varchar
+  opened_date date
+  manager_name varchar
+  created_at timestamp
+}
+
+Table accounts {
+  account_id bigint [pk] // Surrogate Key
+  customer_id bigint
+  branch_id bigint
+  account_type varchar // savings, current, loan, credit
+  account_status varchar // active, dormant, closed
+  opened_date date
+  closed_date date
+  interest_rate decimal
+}
+
+Table transactions_fact {
+  transaction_id bigint [pk] // Surrogate Key (Fact Table Key)
+  account_id bigint
+  transaction_type varchar // credit, debit, transfer, loan_payment
+  amount decimal
+  transaction_date timestamp
+  balance_after_txn decimal
+  description varchar
+  channel varchar // ATM, Online, Branch, POS
+  merchant_name varchar
+}
+
+Table employees {
+  employee_id bigint [pk]
+  branch_id bigint
+  first_name varchar
+  last_name varchar
+  role varchar // teller, manager, advisor
+  hire_date date
+  salary decimal
+  phone varchar
+  email varchar
+}
+
+
+Ref: accounts.customer_id > customers.customer_id
+Ref: accounts.branch_id > branches.branch_id
+Ref: transactions_fact.account_id > accounts.account_id
+Ref: employees.branch_id > branches.branch_id
