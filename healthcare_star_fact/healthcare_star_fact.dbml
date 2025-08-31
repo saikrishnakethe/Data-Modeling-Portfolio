@@ -1,0 +1,87 @@
+Table patients {
+  patient_sk int [pk, increment]               // Surrogate Key
+  patient_id varchar                             // Natural Key / external ID
+  first_name varchar
+  last_name varchar
+  dob date
+  gender varchar
+  city varchar
+  state varchar
+  country varchar
+  insurance_provider varchar
+  active_flag boolean
+  start_date timestamp                          // SCD Type 2 - Effective start
+  end_date timestamp                            // SCD Type 2 - Effective end
+  current_flag boolean                          // SCD Type 2 - Current record flag
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table doctors {
+  doctor_sk int [pk, increment]                 // Surrogate Key
+  doctor_id varchar                              // Natural Key
+  first_name varchar
+  last_name varchar
+  specialization varchar
+  department varchar
+  city varchar
+  state varchar
+  start_date timestamp                          // SCD Type 2
+  end_date timestamp                            // SCD Type 2
+  current_flag boolean                          // SCD Type 2
+  active_flag boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table hospitals {
+  hospital_id int [pk, increment]
+  name varchar
+  city varchar
+  state varchar
+  country varchar
+  postal_code varchar
+  contact_number varchar
+}
+
+Table diagnosis_codes {
+  diagnosis_code_id varchar [pk]
+  description varchar
+  category varchar
+}
+
+Table treatments {
+  treatment_id int [pk, increment]
+  treatment_code varchar
+  description varchar
+  category varchar
+}
+
+Table visit_status {
+  visit_status_id int [pk]
+  status_name varchar
+  description varchar
+}
+
+Table visit_fact {
+  visit_id bigint [pk, increment]
+  patient_sk int
+  doctor_sk int
+  hospital_id int
+  visit_status_id int
+  diagnosis_code_id varchar
+  treatment_id int
+  visit_start_ts timestamp
+  visit_end_ts timestamp
+  total_fee decimal(12,2)
+  notes text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: patients.patient_sk < visit_fact.patient_sk
+Ref: doctors.doctor_sk < visit_fact.doctor_sk
+Ref: hospitals.hospital_id < visit_fact.hospital_id
+Ref: visit_status.visit_status_id < visit_fact.visit_status_id
+Ref: diagnosis_codes.diagnosis_code_id < visit_fact.diagnosis_code_id
+Ref: treatments.treatment_id < visit_fact.treatment_id
