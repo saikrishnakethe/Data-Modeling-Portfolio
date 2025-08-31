@@ -1,0 +1,64 @@
+Table users {
+  user_id int [pk, increment]               // Surrogate Key
+  user_external_id varchar                  // Business Key
+  first_name varchar
+  last_name varchar
+  email varchar
+  gender varchar
+  date_of_birth date
+  signup_date timestamp
+  subscription_plan varchar
+  country varchar
+  city varchar
+  state varchar
+  active_flag boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table content {
+  content_id int [pk, increment]
+  content_external_id varchar               // Business Key
+  title varchar
+  content_type varchar                      // Movie, Series, Documentary
+  genre varchar
+  release_date date
+  language varchar
+  duration_min int
+  rating decimal(3,2)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table devices {
+  device_id int [pk, increment]
+  device_type varchar                        // TV, Mobile, Tablet, PC
+  os varchar
+  os_version varchar
+  manufacturer varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table watch_fact {
+  watch_id bigint [pk, increment]           // Fact Table
+  user_id int                               // Refers to users.user_id
+  content_id int                            // Refers to content.content_id
+  device_id int                             // Refers to devices.device_id
+  watch_start_ts timestamp
+  watch_end_ts timestamp
+  duration_min int                           // Total watch duration
+  completed_flag boolean                     // If user watched till end
+  binge_flag boolean                         // If watched multiple episodes
+  subscription_plan varchar                  // Denormalized from users for faster queries
+  content_genre varchar                       // Denormalized from content
+  content_type varchar                        // Denormalized from content
+  country varchar                             // Denormalized from users
+  city varchar                                // Denormalized from users
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: watch_fact.user_id < users.user_id
+Ref: watch_fact.content_id < content.content_id
+Ref: watch_fact.device_id < devices.device_id
