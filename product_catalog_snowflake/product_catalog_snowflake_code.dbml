@@ -1,0 +1,62 @@
+Table categories {
+  category_id int [pk, increment]            // Surrogate Key
+  category_name varchar
+  description varchar
+  parent_category_id int                      
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table subcategories {
+  subcategory_id int [pk, increment]
+  subcategory_name varchar
+  description varchar
+  category_id int                             // Refers to categories.category_id
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table products {
+  product_id int [pk, increment]
+  product_sku varchar [unique]                // Business Key
+  product_name varchar
+  description text
+  brand varchar
+  subcategory_id int                           // Refers to subcategories.subcategory_id
+  weight decimal(10,2)
+  unit varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table suppliers {
+  supplier_id int [pk, increment]
+  supplier_name varchar
+  contact_name varchar
+  email varchar
+  phone varchar
+  city varchar
+  state varchar
+  country varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inventory_fact {
+  inventory_id bigint [pk, increment]        // Fact Table
+  product_id int
+  supplier_id int
+  warehouse varchar
+  stock_qty int
+  reorder_level int
+  cost_price decimal(10,2)
+  selling_price decimal(10,2)
+  last_restock_ts timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: subcategories.category_id < categories.category_id
+Ref: products.subcategory_id < subcategories.subcategory_id
+Ref: inventory_fact.product_id < products.product_id
+Ref: inventory_fact.supplier_id < suppliers.supplier_id
