@@ -59,13 +59,6 @@ These models demonstrate my ability to design **scalable, efficient, and busines
 
 ---
 
-### 7. Course Platform User Engagement (Star Schema)
-- **Fact**: Engagement Fact (video views, quiz attempts, course completions)  
-- **Dimensions**: User, Course, Activity Type, Date  
-- **Why Star Schema?** Supports fast engagement analysis across dimensions.  
-- **Use Case**: Learning progress tracking, course popularity analysis, student retention metrics.
-
----
 
 ## 🛠️ Tools & Technologies Used
 - **Modeling**: [dbdiagram.io](https://dbdiagram.io/)  
