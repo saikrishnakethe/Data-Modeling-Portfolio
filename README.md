@@ -71,7 +71,8 @@ These models demonstrate my ability to design **scalable, efficient, and busines
 Each folder contains:
 - `schema.dbml` → DBML code for reproducibility in dbdiagram.io  
 - `schema.png` → ERD diagram for visualization  
-- `description.md` → Context, design decisions, DDL examples, and example queries  
+- `description.md` → Context, design decisions and DDL examples.
+-  `example_queries.sql` → Example queries
 
 ---
 
